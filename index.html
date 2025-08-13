@@ -45,23 +45,6 @@
 
 <script type="text/javascript" async>!function(e,t){a=e.createElement("script"),m=e.getElementsByTagName("script")[0],a.async=1,a.src=t,m.parentNode.insertBefore(a,m)}(document,"https://universal.wgplayer.com/tag/?lh="+window.location.hostname+"&wp="+window.location.pathname+"&ws="+window.location.search);
     </script>
-		<input type="text" id="searchInput" placeholder="Search in Play folder..." onkeyup="filterList()" />
-<ul id="playList">
-  <li><a href="play/file1.html">File 1</a></li>
-  <li><a href="play/file2.html">File 2</a></li>
-  <!-- Add more list items here -->
-</ul>
-<script>
-function filterList() {
-  const input = document.getElementById('searchInput').value.toLowerCase();
-  const items = document.querySelectorAll('#playList li');
-
-  items.forEach(item => {
-    const text = item.textContent.toLowerCase();
-    item.style.display = text.includes(input) ? '' : 'none';
-  });
-}
-</script>
 
 
 
