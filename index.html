@@ -48,27 +48,32 @@
 		<input type="text" id="searchBox" placeholder="Search games..." />
 <ul id="results"></ul>
 <script>
-// Your GitHub repo info
-const username = "jaydenmcl";
-const repo = "remake63.github.io";
-const folderPath = "play";
+const username = "jaydenmcl"; // your GitHub username
+const repo = "remake63.github.io"; // your repo name
+const folderPath = "play"; // folder to search in
 
-// Elements
 const searchBox = document.getElementById("searchBox");
 const resultsList = document.getElementById("results");
 
-// Fetch files from GitHub API
-async function fetchFiles() {
+async function searchFiles(query) {
+    if (!query) {
+        resultsList.innerHTML = ""; // clear results if no search
+        return;
+    }
+
     const url = `https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`;
     const res = await fetch(url);
     const files = await res.json();
-    return files.filter(file => file.type === "file"); // only files
-}
 
-// Render file list
-function renderList(files) {
+    // Filter matches
+    const matches = files.filter(file =>
+        file.type === "file" &&
+        file.name.toLowerCase().includes(query.toLowerCase())
+    );
+
+    // Render matches
     resultsList.innerHTML = "";
-    files.forEach(file => {
+    matches.forEach(file => {
         const li = document.createElement("li");
         const link = document.createElement("a");
         link.href = `${folderPath}/${file.name}`;
@@ -78,27 +83,12 @@ function renderList(files) {
     });
 }
 
-// Filter results
-function filterList(files, query) {
-    return files.filter(file =>
-        file.name.toLowerCase().includes(query.toLowerCase())
-    );
-}
-
-// Main
-let allFiles = [];
-fetchFiles().then(files => {
-    allFiles = files;
-    renderList(allFiles);
-});
-
-// Listen for search input
+// Search when typing
 searchBox.addEventListener("input", () => {
-    const query = searchBox.value;
-    const filtered = filterList(allFiles, query);
-    renderList(filtered);
+    searchFiles(searchBox.value);
 });
 </script>
+
 
 
 
