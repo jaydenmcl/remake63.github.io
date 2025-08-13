@@ -45,6 +45,61 @@
 
 <script type="text/javascript" async>!function(e,t){a=e.createElement("script"),m=e.getElementsByTagName("script")[0],a.async=1,a.src=t,m.parentNode.insertBefore(a,m)}(document,"https://universal.wgplayer.com/tag/?lh="+window.location.hostname+"&wp="+window.location.pathname+"&ws="+window.location.search);
     </script>
+		<input type="text" id="searchBox" placeholder="Search games..." />
+<ul id="results"></ul>
+<script>
+// Your GitHub repo info
+const username = "jaydenmcl";
+const repo = "remake63.github.io";
+const folderPath = "play";
+
+// Elements
+const searchBox = document.getElementById("searchBox");
+const resultsList = document.getElementById("results");
+
+// Fetch files from GitHub API
+async function fetchFiles() {
+    const url = `https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`;
+    const res = await fetch(url);
+    const files = await res.json();
+    return files.filter(file => file.type === "file"); // only files
+}
+
+// Render file list
+function renderList(files) {
+    resultsList.innerHTML = "";
+    files.forEach(file => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `${folderPath}/${file.name}`;
+        link.textContent = file.name;
+        li.appendChild(link);
+        resultsList.appendChild(li);
+    });
+}
+
+// Filter results
+function filterList(files, query) {
+    return files.filter(file =>
+        file.name.toLowerCase().includes(query.toLowerCase())
+    );
+}
+
+// Main
+let allFiles = [];
+fetchFiles().then(files => {
+    allFiles = files;
+    renderList(allFiles);
+});
+
+// Listen for search input
+searchBox.addEventListener("input", () => {
+    const query = searchBox.value;
+    const filtered = filterList(allFiles, query);
+    renderList(filtered);
+});
+</script>
+
 
 
 
