@@ -5,7 +5,9 @@
   <title>Admin Panel</title>
   <style>
     body { font-family: Arial; max-width: 600px; margin: 30px auto; }
-    input, textarea { width: 100%; margin-bottom: 10px; }
+    input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; }
+    button { padding: 8px 16px; }
+    #editor { display: none; }
   </style>
 </head>
 <body>
@@ -14,7 +16,7 @@
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
 
-  <div id="editor" style="display:none;">
+  <div id="editor">
     <h2>Edit Content</h2>
     <label>Homepage:</label>
     <textarea id="homepage"></textarea>
@@ -24,92 +26,43 @@
   </div>
 
   <script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  const SUPABASE_URL = "https://ysmrdjbvpcmpmyosiedl.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzbXJkamJ2cGNtcG15b3NpZWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODE5NDMsImV4cCI6MjA3MTM1Nzk0M30.JjiJbJBBx58EjaP9Dl4H89v9fVThN2Rr7BAyJJwycIE";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ⚡ Replace these with your project info
+    const SUPABASE_URL = "https://ysmrdjbvpcmpmyosiedl.supabase.co"; // example: https://abcd1234xyz.supabase.co
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzbXJkamJ2cGNtcG15b3NpZWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODE5NDMsImV4cCI6MjA3MTM1Nzk0M30.JjiJbJBBx58EjaP9Dl4H89v9fVThN2Rr7BAyJJwycIE";
 
-  console.log("Supabase client created:", supabase); // debug
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log("Supabase client created:", supabase);
 
-  let user = null;
+    let user = null;
 
-  async function login() {
-    try {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      console.log("Attempting login with:", email);
+    async function login() {
+      try {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        console.log("Attempting login with:", email);
 
-      let { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-      if (error) {
-        console.error("Login failed:", error);
-        alert("Login failed: " + error.message);
-        return;
-      }
+        if (error) {
+          console.error("Login failed:", error);
+          alert("Login failed: " + error.message);
+          return;
+        }
 
-      if (!data.user) {
-        console.error("No user returned from Supabase.");
-        alert("Login failed: No user found.");
-        return;
-      }
+        if (!data.user) {
+          console.error("No user returned from Supabase.");
+          alert("Login failed: No user found.");
+          return;
+        }
 
-      user = data.user;
-      console.log("Login successful:", user);
+        user = data.user;
+        console.log("Login successful:", user);
 
-      document.getElementById("editor").style.display = "block";
-      loadEditor();
+        document.getElementById("editor").style.display = "block";
+        loadEditor();
 
-    } catch (err) {
-      console.error("Unexpected error during login:", err);
-      alert("Unexpected error during login. Check console.");
-    }
-  }
-
-  async function loadEditor() {
-    try {
-      let { data, error } = await supabase.from("content").select("*");
-      if (error) {
-        console.error("Error loading content:", error);
-        return;
-      }
-      console.log("Loaded content:", data);
-
-      data.forEach(row => {
-        const el = document.getElementById(row.section);
-        if (el) el.value = row.body;
-      });
-    } catch (err) {
-      console.error("Unexpected error loading editor:", err);
-    }
-  }
-
-  async function save() {
-    try {
-      let { data, error } = await supabase.from("content").upsert([
-        { section: "homepage", body: document.getElementById("homepage").value },
-        { section: "about", body: document.getElementById("about").value }
-      ]);
-      if (error) {
-        console.error("Error saving content:", error);
-        alert("Failed to save content. See console.");
-        return;
-      }
-      console.log("Content saved:", data);
-      alert("Content saved!");
-    } catch (err) {
-      console.error("Unexpected error saving content:", err);
-      alert("Unexpected error saving content. See console.");
-    }
-  }
-
-  // Expose login/save functions to the button onclicks
-  window.login = login;
-  window.save = save;
-</script>
-
-</body>
-</html>
+      } catch (err) {
+        console.error("Unexpected error during login:", err);
+        alert("Unexpected error during login. Check c
