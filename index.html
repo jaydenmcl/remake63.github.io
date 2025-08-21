@@ -974,25 +974,24 @@ searchBox.addEventListener("input", () => {
 			To find a list of games here goto https://github.com/jaydenmcl/remake63.github.io/tree/main/play			<span class="dsb-panel">
 				<a href="term.html">Term</a> - <a href="dmca.html">DMCA</a> - <a href="policy.html">Policy</a>			</span>
 		</div>
-	</div>
-	  <div id="homepage"></div>
+	<div id="homepage"></div>
 <div id="about"></div>
 
-<script>
-  const sheetID = "15CfYqGviLi3tAydZdU2WJlaF2uB9PYmwP04MRHiSOtM/edit?gid=0#gid=0";
-  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      const json = JSON.parse(text.substr(47).slice(0, -2));
-      const rows = json.table.rows;
-      rows.forEach(row => {
-        const section = row.c[0].v;
-        const content = row.c[1].v;
-        document.getElementById(section).innerText = content;
-      });
+  const SUPABASE_URL = "https://supabase.com/dashboard/project/ysmrdjbvpcmpmyosiedl";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzbXJkamJ2cGNtcG15b3NpZWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3ODE5NDMsImV4cCI6MjA3MTM1Nzk0M30.JjiJbJBBx58EjaP9Dl4H89v9fVThN2Rr7BAyJJwycIE";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function loadContent() {
+    let { data } = await supabase.from("content").select("*");
+    data.forEach(row => {
+      document.getElementById(row.section).innerText = row.body;
     });
+  }
+
+  loadContent();
 </script>
 
 	<script type="text/javascript" src="js/jquery-3.6.2.min.js"></script>
