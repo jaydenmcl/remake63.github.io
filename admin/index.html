@@ -1,19 +1,40 @@
-<div id="homepage"></div>
-<div id="about"></div>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Site Admin</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 30px auto; }
+    input, textarea { width: 100%; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel</h2>
+  <label>Password: <input type="password" id="password"></label>
+  <button onclick="login()">Login</button>
+  
+  <div id="editor" style="display:none;">
+    <h3>Edit Homepage</h3>
+    <textarea id="homepage"></textarea>
+    <h3>Edit About</h3>
+    <textarea id="about"></textarea>
+    <button onclick="save()">Save</button>
+  </div>
 
-<script>
-  const sheetID = "15CfYqGviLi3tAydZdU2WJlaF2uB9PYmwP04MRHiSOtM/edit?gid=0#gid=0";
-  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+  <script>
+    const ADMIN_PASS = "mypassword123"; // change this!
 
-  fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      const json = JSON.parse(text.substr(47).slice(0, -2));
-      const rows = json.table.rows;
-      rows.forEach(row => {
-        const section = row.c[0].v;
-        const content = row.c[1].v;
-        document.getElementById(section).innerText = content;
-      });
-    });
-</script>
+    function login() {
+      if (document.getElementById("password").value === ADMIN_PASS) {
+        document.getElementById("editor").style.display = "block";
+      } else {
+        alert("Wrong password");
+      }
+    }
+
+    function save() {
+      alert("In real setup, this would update Google Sheets via API.");
+    }
+  </script>
+</body>
+</html>
