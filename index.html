@@ -975,6 +975,26 @@ searchBox.addEventListener("input", () => {
 				<a href="term.html">Term</a> - <a href="dmca.html">DMCA</a> - <a href="policy.html">Policy</a>			</span>
 		</div>
 	</div>
+	  <div id="homepage"></div>
+<div id="about"></div>
+
+<script>
+  const sheetID = "15CfYqGviLi3tAydZdU2WJlaF2uB9PYmwP04MRHiSOtM/edit?gid=0#gid=0";
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+
+  fetch(url)
+    .then(res => res.text())
+    .then(text => {
+      const json = JSON.parse(text.substr(47).slice(0, -2));
+      const rows = json.table.rows;
+      rows.forEach(row => {
+        const section = row.c[0].v;
+        const content = row.c[1].v;
+        document.getElementById(section).innerText = content;
+      });
+    });
+</script>
+
 	<script type="text/javascript" src="js/jquery-3.6.2.min.js"></script>
 	<script type="text/javascript" src="js/lazysizes.min.js"></script>
 	<script type="text/javascript" src="js/popper.min.js"></script>
