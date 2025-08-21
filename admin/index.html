@@ -2,38 +2,64 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Site Admin</title>
+  <title>Admin Panel</title>
   <style>
     body { font-family: Arial; max-width: 600px; margin: 30px auto; }
     input, textarea { width: 100%; margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <h2>Admin Panel</h2>
-  <label>Password: <input type="password" id="password"></label>
+  <h2>Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
-  
+
   <div id="editor" style="display:none;">
-    <h3>Edit Homepage</h3>
+    <h2>Edit Content</h2>
+    <label>Homepage:</label>
     <textarea id="homepage"></textarea>
-    <h3>Edit About</h3>
+    <label>About:</label>
     <textarea id="about"></textarea>
     <button onclick="save()">Save</button>
   </div>
 
-  <script>
-    const ADMIN_PASS = "mypassword123"; // change this!
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    function login() {
-      if (document.getElementById("password").value === ADMIN_PASS) {
-        document.getElementById("editor").style.display = "block";
+    const SUPABASE_URL = "YOUR_PROJECT_URL";
+    const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let user = null;
+
+    async function login() {
+      let { data, error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+      });
+
+      if (error) {
+        alert("Login failed: " + error.message);
       } else {
-        alert("Wrong password");
+        user = data.user;
+        document.getElementById("editor").style.display = "block";
+        loadEditor();
       }
     }
 
-    function save() {
-      alert("In real setup, this would update Google Sheets via API.");
+    async function loadEditor() {
+      let { data } = await supabase.from("content").select("*");
+      data.forEach(row => {
+        document.getElementById(row.section).value = row.body;
+      });
+    }
+
+    async function save() {
+      await supabase.from("content").upsert([
+        { section: "homepage", body: document.getElementById("homepage").value },
+        { section: "about", body: document.getElementById("about").value }
+      ]);
+      alert("Content saved!");
     }
   </script>
 </body>
