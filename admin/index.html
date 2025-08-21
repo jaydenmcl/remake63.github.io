@@ -1,11 +1,19 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Content Manager</title>
-    <!-- Load Netlify CMS -->
-    <script src="https://unpkg.com/netlify-cms-app@^2.0.0/dist/netlify-cms.js"></script>
-  </head>
-  <body>
-  </body>
-</html>
+<div id="homepage"></div>
+<div id="about"></div>
+
+<script>
+  const sheetID = "15CfYqGviLi3tAydZdU2WJlaF2uB9PYmwP04MRHiSOtM/edit?gid=0#gid=0";
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+
+  fetch(url)
+    .then(res => res.text())
+    .then(text => {
+      const json = JSON.parse(text.substr(47).slice(0, -2));
+      const rows = json.table.rows;
+      rows.forEach(row => {
+        const section = row.c[0].v;
+        const content = row.c[1].v;
+        document.getElementById(section).innerText = content;
+      });
+    });
+</script>
