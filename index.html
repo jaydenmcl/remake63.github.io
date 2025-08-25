@@ -194,7 +194,9 @@ searchBox.addEventListener("input", () => {
           		</div>
 				<!-- Collapsible Sidebar Grow a Garden Stock Notifier -->
 <div class="card mt-4">
-  <div class="card-header" style="cursor:pointer;" onclick="toggleStock()">
+  <div class="card-header" 
+       style="cursor:pointer; background-color:red; color:green;" 
+       onclick="toggleStock()">
     🌱 Grow a Garden Stock <span id="stock-toggle-icon">▼</span>
   </div>
   <div class="card-body p-0" id="stock-body" style="display:none;">
@@ -221,6 +223,7 @@ function toggleStock() {
   }
 }
 </script>
+
 
 
 
