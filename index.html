@@ -192,6 +192,36 @@ searchBox.addEventListener("input", () => {
                   <iframe class="game-iframe" id="game-area" src="https://q10games.com/Candy_Crush/candy-crush/index.html" width="480" height="800" scrolling="none" frameborder="0" allowfullscreen></iframe>
           			</div>
           		</div>
+				<!-- Collapsible Sidebar Grow a Garden Stock Notifier -->
+<div class="card mt-4">
+  <div class="card-header" style="cursor:pointer;" onclick="toggleStock()">
+    🌱 Grow a Garden Stock <span id="stock-toggle-icon">▼</span>
+  </div>
+  <div class="card-body p-0" id="stock-body" style="display:none;">
+    <iframe 
+      src="https://growagardenstock.com" 
+      width="100%" 
+      height="400" 
+      frameborder="0" 
+      style="border-radius: 8px;">
+    </iframe>
+  </div>
+</div>
+
+<script>
+function toggleStock() {
+  const body = document.getElementById('stock-body');
+  const icon = document.getElementById('stock-toggle-icon');
+  if (body.style.display === "none") {
+    body.style.display = "block";
+    icon.textContent = "▲"; // change icon when open
+  } else {
+    body.style.display = "none";
+    icon.textContent = "▼"; // change icon when closed
+  }
+}
+</script>
+
 
 
           		<div class="game-info">
