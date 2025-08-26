@@ -163,68 +163,108 @@
 </div>
 
 
+<div id="container">
+ 
+  <button class="play-button" type="button" onclick="PlayTo(this)" style="display: none;">CLICK TO PLAY</button>
+  <p id="unblocked-text">G+</p>
+  <button class="fullscreen-button" type="button" onclick="openFullscreen()">FULLSCREEN</button>
+</div>
+
+<style>
+  .play-button { padding: 20px 40px; background: #000; color: #fff; border: 2px solid #4a148c; border-radius: 10px; font: bold 24px Arial; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1001; }
+  .play-button:hover { background: #4a148c; }
+  .fullscreen-button { padding: 10px 15px; background: #000; color: #fff; border: 2px solid #4a148c; border-radius: 5px; font: bold 14px Arial; cursor: pointer; position: fixed; bottom: 20px; right: 20px; z-index: 1002; }
+  .fullscreen-button:hover { background: #4a148c; }
+  body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+</style>
+
+<script>
+  const DB_NAME = 'GameCacheDB';
+  const STORE_NAME = 'GameFiles';
+  const CACHE_DURATION = 90 * 24 * 60 * 60 * 1000; // 3 ay
+  const FILE_URL = 'https://cdn.jsdelivr.net/gh/gru6nny/ohd@main/gra6n.xml';
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, 1);
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        db.createObjectStore(STORE_NAME, { keyPath: 'url' });
+      };
+      request.onsuccess = (event) => resolve(event.target.result);
+      request.onerror = (event) => reject(event.target.error);
+    });
+  }
+
+  async function saveToCache(url, content) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(STORE_NAME, 'readwrite');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.put({ url: url, content: content, timestamp: Date.now() });
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error('Cache error'));
+    });
+  }
+
+  async function getFileFromCache(url) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(STORE_NAME, 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.get(url);
+      request.onsuccess = async (event) => {
+        const data = event.target.result;
+        if (data && (Date.now() - data.timestamp) < CACHE_DURATION) {
+          resolve(data.content);
+        } else {
+          try {
+            const response = await fetch(url);
+            const text = await response.text();
+            await saveToCache(url, text);
+            resolve(text);
+          } catch (err) {
+            reject(err);
+          }
+        }
+      };
+      request.onerror = () => reject(new Error('DB error'));
+    });
+  }
+
+  function PlayTo(button) {
+    const iframe = document.getElementById("fr");
+    getFileFromCache(FILE_URL).then((text) => {
+      iframe.contentDocument.open();
+      iframe.contentDocument.write(text);
+      iframe.contentDocument.close();
+      iframe.style.display = "block";
+      button.style.display = "none";
+    }).catch((err) => {
+      console.error('Error:', err);
+      alert('Oyun yüklenemedi.');
+    });
+  }
+
+  function openFullscreen() {
+    getFileFromCache(FILE_URL).then((text) => {
+      const newWindow = window.open("", "_blank");
+      if (newWindow) {
+        newWindow.document.open();
+        newWindow.document.write(text);
+        newWindow.document.close();
+      } else {
+        alert('Tam ekran açılamadı.');
+      }
+    }).catch((err) => {
+      console.error('Error:', err);
+      alert('Tam ekran yüklenemedi.');
+    });
+  }
+</script>
 
 
-
-  <div class="row">
-      <div class="col-md-9">
-          	<div class="game-container">
-          		<div class="game-content" data-id="169">
-          			<div id="allow_mobile_version"></div>			
-               <!-- 
-                <div id="mobile-play" style="display: none;">
-          				<div class="mobile-thumb-play">
-          					<img src="#">
-          				</div>
-          				<div id="mobile-play-btn">
-          					<i class="bi bi-play-circle-fill"></i>
-          				</div>
-          			</div> -->
-
-
-
-          			<div class="game-iframe-container" id="game-player">
-          				<div id="mobile-back-button" draggable="true">
-          					<i class="bi bi-x-circle-fill"></i>
-          				</div>
-          				<iframe class="game-iframe" id="game-area" src="https://htmlxm.github.io/h2/11-11" width="480" height="800" scrolling="none" frameborder="0" allowfullscreen></iframe>
-          			</div>
-          		</div>
-
-
-          		<div class="game-info">
-          			<div class="header-left">
-          				<h1 class="single-title">11-11</h1>
-
-
-          			</div>
-          			<div class="header-right">
-
-
-          				<div class="b-action2">
-          		
-          					<a href="#" onclick="open_fullscreen()" class="btn btn-capsule"><i class="bi bi-arrows-fullscreen b-icon"></i>Fullscreen</a>
-          				</div>
-          			</div>
-          		</div>
-          	</div>
-
-      </div><!-- end col-9 -->
-      
-
-      <div class="col-md-3">
-        <div style="">
-          <!-- ads_doc -->
-   
-
-        </div>
-      </div>
-
-
-  </div><!-- end row -->
-
-
-</div> <!-- end row container game-wrapper-->
+  
 
 
 
