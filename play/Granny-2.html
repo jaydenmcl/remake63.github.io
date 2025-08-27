@@ -220,7 +220,6 @@ padding-top: 20px;
 }
 </style>
 
-<div style="width:100%; max-width:1200px; height:700px; margin:auto; overflow:hidden;">
 	
 <script>
 const DB_NAME = 'GameCacheDB';
@@ -286,7 +285,7 @@ iframe.style.display = "block";
 button.style.display = "none";
 }).catch((err) => {
 console.error('Error:', err);
-alert('Oyun yüklenemedi.');
+alert('Game failed to load.');
 });
 }
 
@@ -298,16 +297,15 @@ newWindow.document.open();
 newWindow.document.write(text);
 newWindow.document.close();
 } else {
-alert('Tam ekran açılamadı.');
+alert('Could not open full screen.');
 }
 }).catch((err) => {
 console.error('Error:', err);
-alert('Tam ekran yüklenemedi.');
+alert('Failed to load full screen.');
 });
 }
 </script> 
 
-</div>
 
 
 
