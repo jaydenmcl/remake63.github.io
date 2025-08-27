@@ -331,7 +331,7 @@ iframe.style.display = "block";
 button.style.display = "none";
 }).catch((err) => {
 console.error('Error:', err);
-alert('Oyun yüklenemedi.');
+alert('Game failed to load.');
 });
 }
 
@@ -343,11 +343,11 @@ newWindow.document.open();
 newWindow.document.write(text);
 newWindow.document.close();
 } else {
-alert('Tam ekran açılamadı.');
+alert('Could not open full screen.');
 }
 }).catch((err) => {
 console.error('Error:', err);
-alert('Tam ekran yüklenemedi.');
+alert('Failed to load full screen.');
 });
 }
 </script>
@@ -1209,6 +1209,15 @@ alert('Tam ekran yüklenemedi.');
     </a>
   </div>  
 
+<div class="col-lg-2 col-md-4 col-6 grid-2">
+  <a href="/play/granny-2.html">
+  <div class="game-item">
+    <div class="list-game">
+      <div class="list-thumbnail"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtdh0EOptslG6Re87F0Mc5YDl0gBKbGDmkSw&s" data-src="https://htmlxm.github.io/thumb/raft-wars.png" class="lazyload" alt="Granny Chapter 2"></div>
+    </div>
+  </div>
+  </a>
+</div>
 
 
 
