@@ -208,12 +208,11 @@ margin: 10px auto; /* centers below the text */
 background: #4a148c;
 }
 
-body, html {
-margin: 0;
-padding: 0;
-overflow: hidden;
-height: 100%;
-}
+  html, body {
+    height: auto !important;
+    overflow: auto !important;
+  }
+
 
 #container {
 text-align: center; /* ensures G+ text and button are centered */
@@ -221,7 +220,8 @@ padding-top: 20px;
 }
 </style>
 
-
+<div style="width:100%; max-width:1200px; height:700px; margin:auto; overflow:hidden;">
+	
 <script>
 const DB_NAME = 'GameCacheDB';
 const STORE_NAME = 'GameFiles';
@@ -307,7 +307,7 @@ alert('Tam ekran yüklenemedi.');
 }
 </script> 
 
-
+</div>
 
 
 
