@@ -166,45 +166,23 @@
 
 
 
-<body><div id="container">
+<div id="container">
   <iframe id="fr" width="100%" height="100%" frameborder="0" allowfullscreen=""></iframe>
-  <p id="unblocked-text">Jayden's games</p>
-  <button class="fullscreen-button" type="button" onclick="openFullscreen()">Play</button>
+  <p id="unblocked-text">G+</p>
+  <button class="fullscreen-button" type="button" onclick="openFullscreen()">FULLSCREEN</button>
 </div>
 
 <style>
-.fullscreen-button {
-padding: 10px 15px;
-background: #000;
-color: #fff;
-border: 2px solid #008000;
-border-radius: 5px;
-font: bold 14px Arial;
-cursor: pointer;
-display: block;
-margin: 10px auto; /* centers below the text */
-}
-.fullscreen-button:hover {
-background: #FF0000;
-}
-
-  html, body {
-    height: auto !important;
-    overflow: auto !important;
-  }
-
-
-#container {
-text-align: center; /* ensures Jayden's games text and button are centered */
-padding-top: 20px;
-}
+  .fullscreen-button { padding: 10px 15px; background: #000; color: #fff; border: 2px solid #4a148c; border-radius: 5px; font: bold 14px Arial; cursor: pointer; position: fixed; bottom: 20px; right: 20px; z-index: 1002; }
+  .fullscreen-button:hover { background: #4a148c; }
+  body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
 </style>
 
 <script>
   const DB_NAME = 'GameCacheDB';
   const STORE_NAME = 'GameFiles';
   const CACHE_DURATION = 90 * 24 * 60 * 60 * 1000; // 3 ay
-  const FILE_URL = 'https://raw.githubusercontent.com/jaydenmcl/Logo/refs/heads/main/logo.html';
+  const FILE_URL = 'https://cdn.jsdelivr.net/gh/organ-nizator/ff@main/arch.xml';
 
   function openDB() {
     return new Promise((resolve, reject) => {
@@ -264,7 +242,7 @@ padding-top: 20px;
       button.style.display = "none";
     }).catch((err) => {
       console.error('Error:', err);
-      alert('Game failed to load.');
+      alert('Oyun yüklenemedi.');
     });
   }
 
@@ -276,11 +254,11 @@ padding-top: 20px;
         newWindow.document.write(text);
         newWindow.document.close();
       } else {
-        alert('Could not open full screen.');
+        alert('Tam ekran açılamadı.');
       }
     }).catch((err) => {
       console.error('Error:', err);
-      alert('Failed to load full screen.');
+      alert('Tam ekran yüklenemedi.');
     });
   }
 </script>
