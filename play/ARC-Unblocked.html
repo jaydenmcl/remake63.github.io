@@ -173,9 +173,31 @@
 </div>
 
 <style>
-  .fullscreen-button { padding: 10px 15px; background: #000; color: #fff; border: 2px solid #4a148c; border-radius: 5px; font: bold 14px Arial; cursor: pointer; position: fixed; bottom: 20px; right: 20px; z-index: 1002; }
-  .fullscreen-button:hover { background: #4a148c; }
-  body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+.fullscreen-button {
+padding: 10px 15px;
+background: #000;
+color: #fff;
+border: 2px solid #008000;
+border-radius: 5px;
+font: bold 14px Arial;
+cursor: pointer;
+display: block;
+margin: 10px auto; /* centers below the text */
+}
+.fullscreen-button:hover {
+background: #FF0000;
+}
+
+  html, body {
+    height: auto !important;
+    overflow: auto !important;
+  }
+
+
+#container {
+text-align: center; /* ensures Jayden's games text and button are centered */
+padding-top: 20px;
+}
 </style>
 
 <script>
